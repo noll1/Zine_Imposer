@@ -1,0 +1,27 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
+  "include": [
+  "src/renderer/src/env.d.ts",
+  "src/renderer/src/**/*",
+  "src/renderer/src/**/*.svelte",
+  "src/preload/*.d.ts",
+  "src/core/settings.ts",
+  "src/core/api.ts",
+    "src/core/sequence.ts",
+    "src/core/custom.ts",
+    "src/core/notes.ts",
+    "src/core/geometry.ts",
+    "src/core/layouts/index.ts",
+    "src/core/layouts/saddle.ts",
+    "src/core/layouts/types.ts"
+  ],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "useDefineForClassFields": true,
+    "strict": false,
+    "allowJs": true,
+    "checkJs": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+  }
+}

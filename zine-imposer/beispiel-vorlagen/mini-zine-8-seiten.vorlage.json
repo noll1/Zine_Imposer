@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "name": "Beispiel: Mini-Zine 8 Seiten (eigenes Schema)",
+  "binding": "custom",
+  "custom": {
+    "name": "Mini-Zine aus einem A4-Blatt",
+    "pages": 8,
+    "sheets": [
+      {
+        "front": [
+          ["5^", "4^", "3^", "2^"],
+          ["6", "7", "8", "1"]
+        ],
+        "back": null
+      }
+    ]
+  },
+  "signaturePages": 16,
+  "twoCopies": false,
+  "sheet": { "width": 297, "height": 210 },
+  "duplexFlip": "short-edge",
+  "bleed": { "top": 0, "bottom": 0, "inner": 0, "outer": 0 },
+  "bleedLayout": "facing",
+  "cover": true,
+  "extraFront": 0,
+  "extraBack": 0,
+  "cropMarks": {
+    "enabled": false,
+    "sides": {
+      "top": { "enabled": true, "length": 5, "offset": 3 },
+      "bottom": { "enabled": true, "length": 5, "offset": 3 },
+      "left": { "enabled": true, "length": 5, "offset": 3 },
+      "right": { "enabled": true, "length": 5, "offset": 3 }
+    }
+  }
+}
