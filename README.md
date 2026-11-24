@@ -1,187 +1,152 @@
 # Zine Imposer
 
-**PDF rein, Druckbögen raus.**
+A small app that lets you import your zines and booklets to create print-ready PDFs in the format of
+your choice. You can also build your own templates and share them with students or friends. A 3D view
+makes it easy to check that your booklet is set up correctly. You can flip through the pages or preview
+the final print-ready files.
 
-Eine kleine Mac-App, die Zines und Hefte für den Druck ausschießt – damit die Seiten nach dem
-Falzen, Schneiden und Heften in der richtigen Reihenfolge liegen.
+- Version: Beta 0.1.2
+- Platform: macOS (Apple Silicon and Intel)
+- Interface language: German
 
-**Version:** Beta 0.1.2 · **System:** macOS (Apple Silicon und Intel)
+## Note on development
 
-## Worum es geht
+This app was vibecoded. The code was written by an AI (Claude by Anthropic) based on my descriptions,
+tests and feedback; I am a communications design student, not a software developer. The imposition logic is covered
+by automated tests and the output has been measured against real print sheets. Always make a test print
+before a larger print run.
 
-Wer ein Zine druckt, kennt das Problem: In InDesign liegen die Seiten schön der Reihe nach, auf dem
-Druckbogen müssen sie aber kreuz und quer und teils auf dem Kopf stehen. Bisher hieß das:
-Ausschießer-Vorlagen öffnen, Seiten von Hand platzieren, hoffen, dass nichts verrutscht.
+## Features
 
-Zine Imposer nimmt dir das ab. Du ziehst dein PDF hinein, wählst die Bindung, und die App erzeugt
-die fertigen Druckbögen – mit Anschnitt, Schnittmarken und Hinweisen fürs Falzen. Vorher siehst du
-dein Heft als 3D-Vorschau und kannst es durchblättern.
+- Binding types: saddle stitch, signatures (sewn or perfect bound), single-sheet zine (8 pages),
+  perfect binding from single sheets, accordion fold (leporello), 24-page fold sheet (16 + 8)
+- Custom imposition schemes: grid, page positions and rotation, automatic back side, gaps between
+  pages, text and fold or cut lines on the sheet
+- Templates: save settings, export them as a file and import them on another computer
+- Bleed per edge (top, bottom, inside, outside), detected from the PDF
+- Crop and fold marks, adjustable per sheet edge
+- Preview: page overview, 3D booklet, print sheet view with zoom
+- Remove duplicate pages, add blank pages, warning when pages are missing
 
-### Was die App kann
+## Installation
 
-| Bereich | Was geht |
-| --- | --- |
-| **Bindungsarten** | Rückstichheftung · Lagenbindung (Faden-/Klebebindung) · Ein-Blatt-Zine (8 Seiten) · Klebebindung aus Einzelblättern · Leporello · Ausschießer 24 Seiten (Falzbogen 16 + 8) |
-| **Eigene Schemata** | Raster frei anlegen, Seiten eintragen und drehen, Rückseite automatisch berechnen, Abstände (Stege) zwischen den Seiten, Texte sowie Falz- und Schnittlinien direkt auf dem Bogen |
-| **Vorlagen** | Einstellungen speichern, als Datei weitergeben und importieren – z. B. als Kursvorlage |
-| **Anschnitt** | je Seite (oben, unten, innen, außen), wird aus dem PDF erkannt |
-| **Marken** | Schnitt- und Falzmarken, jede Bogenseite einzeln einstellbar |
-| **Vorschau** | Seitenübersicht · 3D-Heft zum Durchblättern · Druckbogen-Ansicht mit Zoom |
-| **Kontrolle** | doppelte Seiten entfernen, Leerseiten ergänzen, Warnung bei fehlenden Seiten |
+1. Open `Zine Imposer Beta 0.1.2.dmg` and drag Zine Imposer into the Applications folder.
+2. Start the app once. macOS will block it because it is not notarized by Apple.
+3. Open System Settings > Privacy & Security, scroll down and click "Open Anyway" next to Zine Imposer.
 
-## ✨ Gevibecoded
-
-Ehrlich gesagt: Diese App ist **gevibecoded**. Ich komme aus dem Grafikdesign, nicht aus der
-Softwareentwicklung. Der Code ist im Gespräch mit einer KI (Claude von Anthropic) entstanden – ich
-habe beschrieben, was ich brauche, getestet, Fehler gemeldet und Wünsche nachgeschoben; die KI hat
-programmiert.
-
-Was das für dich heißt:
-
-- Der Ausschieß-Kern ist mit automatischen Tests abgesichert, und die Ergebnisse wurden an echten
-  Druckbögen nachgemessen. Trotzdem: **Mach vor einer großen Auflage immer einen Probedruck.**
-- Manches ist sicher nicht so gelöst, wie es ein Profi lösen würde. Hinweise, Fehlerberichte und
-  Verbesserungen sind herzlich willkommen.
-- Für Farbverbindlichkeit (PDF/X, Profile) gilt: Die App verändert Farben nicht, prüft sie aber
-  auch nicht. Das letzte Wort hat das Preflight deiner Druckerei.
-
-## Anleitung
-
-### 1. App installieren
-
-1. `Zine Imposer Beta 0.1.2.dmg` öffnen und **Zine Imposer** in den Ordner **Programme** ziehen.
-2. Die App einmal starten. macOS blockiert sie, weil sie nicht von Apple geprüft ist.
-3. **Systemeinstellungen → Datenschutz & Sicherheit** öffnen, nach unten scrollen und bei Zine Imposer
-   auf **„Trotzdem öffnen“** klicken. Ab jetzt startet die App normal.
-
-Meldet macOS stattdessen, die App sei „beschädigt“, hilft dieser Befehl im Terminal:
+If macOS reports that the app is damaged, run this command in Terminal:
 
 ```bash
 xattr -dr com.apple.quarantine "/Applications/Zine Imposer.app"
 ```
 
-### 2. PDF aus InDesign exportieren
+## Usage
 
-Die App braucht ein PDF mit **Einzelseiten** in Lesereihenfolge:
+The interface is in German. Labels are given below as they appear in the app, with a translation.
 
-- Beim Export **„Seiten“** wählen, nicht „Druckbögen“, und bei „Bereich“ **„Alle“**.
-- Unter **Marken und Anschnitt** die Option **„Anschnittseinstellungen des Dokuments verwenden“**
-  aktivieren. Schnittmarken brauchst du hier nicht – die setzt die App.
-- Alle Seiten sollten dasselbe Format haben.
+### 1. Export the PDF from InDesign
 
-### 3. PDF hineinziehen
+- Export **pages**, not spreads, and choose **All** as the range.
+- Under Marks and Bleed, enable **Use Document Bleed Settings**. Crop marks are not needed; the app
+  adds them.
+- All pages should have the same size.
 
-Zieh das PDF ins Fenster oder klick auf das Ablagefeld. Die App zeigt dir sofort Seitenzahl,
-Seitenformat und Endformat. Erkennt sie Anschnitt im PDF, schlägt sie ihn unter
-**Anschnitt und Marken** mit einem Klick auf **„übernehmen“** vor.
+### 2. Import the PDF
 
-### 4. Bindung und Bogen wählen
+Drag the PDF into the window or click the drop area. The app shows the page count, page size and trim
+size. If the PDF contains bleed information, it is offered under *Anschnitt und Marken* (Bleed and
+marks) and can be applied with *übernehmen* (apply).
 
-Rechts in den Einstellungen:
+### 3. Choose the settings
 
-- **Bindung:** Unter jeder Bindungsart steht kurz, wie sie gefaltet und gebunden wird.
-- **Seitenaufbau:** Ist Seite 1 dein Umschlag, lass **„Titelseite vorhanden“** angehakt. Fehlt etwas
-  oder hat sich etwas verschoben, kannst du vorne oder hinten **Leerseiten** ergänzen.
-- **Druckbogen:** Format wählen (A4, A3, SRA3 … oder eigene Maße). Bei Duplex-Druck einstellen, ob
-  der Drucker an der kurzen oder langen Kante wendet.
-- **Anschnitt:** Mit dem Ketten-Symbol stellst du alle vier Seiten gleich ein, ohne Kette einzeln –
-  z. B. 3–3–0–3 mm (oben, unten, innen, außen).
-- **Marken:** Schnitt- und Falzmarken einschalten und je Bogenseite Länge und Abstand festlegen.
+- *Bindung* (Binding): choose the binding type. A short description is shown below the selection.
+- *Seitenaufbau* (Page setup): keep *Titelseite vorhanden* (has cover page) checked if page 1 is the
+  cover. Blank pages can be added at the front or back.
+- *Druckbogen* (Print sheet): choose the sheet size and, for duplex printing, whether the printer flips
+  on the short or long edge.
+- *Anschnitt* (Bleed): use the chain button to set all four edges at once, or set them individually,
+  e.g. 3 / 3 / 0 / 3 mm (top, bottom, inside, outside).
+- *Marken* (Marks): enable crop and fold marks and set their length and offset per edge.
 
-Unter **Ergebnis** steht, was herauskommt – etwa „6 Bögen, 2 Leerseiten“. Fehlen bei einer Bindung
-mit fester Seitenzahl Seiten, erscheint eine orange Warnung.
+*Ergebnis* (Result) shows the number of sheets and blank pages. A warning appears if a binding with a
+fixed page count is missing pages.
 
-### 5. Vorschau prüfen
+### 4. Check the preview
 
-Oben in der Vorschau wählst du die Ansicht:
+The preview has three views:
 
-- **Seiten** – dein Heft als Doppelseiten. Fährst du mit der Maus über eine Seite, kannst du sie mit
-  **×** aus dem Heft nehmen (praktisch bei doppelten Seiten). Entfernte Seiten holst du mit einem
-  Klick zurück.
-- **3D** – das fertige Heft zum Durchblättern, mit Pfeiltasten oder Schieberegler.
-- **Druckbogen** – so liegen die Seiten auf den Bögen. Zoomen mit dem Trackpad oder Ctrl + Mausrad,
-  verschieben durch Ziehen.
+- *Seiten* (Pages): the booklet as spreads. Hover over a page and click × to remove it. Removed pages
+  can be restored.
+- *3D*: the folded booklet. Flip through it with the arrow keys or the slider.
+- *Druckbogen* (Print sheet): the pages as placed on the sheets. Zoom with the trackpad or
+  Ctrl + scroll wheel, drag to pan.
 
-Läuft die Vorschau bei großen Bildern zäh, stell die Qualität rechts oben auf **„Schnell“**.
-Fürs genaue Hinschauen beim Zoomen gibt es **„Scharf“** und **„Detail“**.
+The preview quality can be set to *Schnell* (fast), *Normal*, *Scharf* (sharp) or *Detail*.
 
-### 6. Druckbogen erstellen
+### 5. Create the print sheets
 
-Unten rechts auf **„Druckbogen erstellen“** klicken, Speicherort wählen – fertig. Der Fortschritt
-steht in der Leiste daneben.
+Click *Druckbogen erstellen* (Create print sheets) and choose a location. Print double-sided with the
+image centered; for most bindings, flip on the short edge.
 
-**Beim Drucken:** beidseitig, **„Druckbild zentriert“**, und bei den meisten Bindungen
-**„Bindung an kurzer Kante“**. Ein Probedruck in Schwarzweiß auf normalem Papier lohnt sich immer.
+## Templates
 
-## Vorlagen
+Settings can be saved as a template under *Vorlage* (Template). The app includes a template for the
+24-page fold sheet (460 × 320 mm, bleed 3 / 3 / 0 / 3 mm).
 
-Unter **Vorlage** speicherst du deine Einstellungen unter einem Namen und lädst sie später wieder.
-Mitgeliefert ist der **Ausschießer 24 Seiten** (460 × 320 mm, Anschnitt 3–3–0–3) inklusive
-Falzhinweisen.
+*Exportieren* (Export) saves a template as a `.vorlage.json` file. To import it, drag the file into the
+window or use *Importieren* (Import). An example is included in [`beispiel-vorlagen`](beispiel-vorlagen).
 
-**Vorlagen teilen:** Mit **„Exportieren …“** wird eine Vorlage zur Datei (`….vorlage.json`), die du
-z. B. an einen Kurs verschickst. Wer sie bekommt, zieht sie einfach ins Fenster oder nutzt
-**„Importieren …“**. Ein Beispiel liegt im Ordner [`beispiel-vorlagen`](beispiel-vorlagen).
+Templates are stored in `~/Library/Application Support/Zine Imposer/templates`.
 
-## Eigenes Ausschießschema bauen
+## Custom imposition schemes
 
-Für Falzungen, die es noch nicht gibt, öffnest du unter **Bindung** den Schema-Editor mit
-**„Eigenes Schema erstellen …“** – oder nimmst den Ausschießer 24 mit
-**„Als eigenes Schema bearbeiten …“** als Ausgangspunkt.
+Under *Bindung*, *Eigenes Schema erstellen* (Create custom scheme) opens the scheme editor. The 24-page
+fold sheet can be used as a starting point via *Als eigenes Schema bearbeiten* (Edit as custom scheme).
 
-1. **Seiten im Heft** angeben und das **Raster** festlegen (Spalten × Zeilen je Bogen).
-2. In jedes Feld die **Seitenzahl** eintragen. **↻** stellt eine Seite auf den Kopf,
-   **↻ am Zeilenanfang** gleich die ganze Reihe.
-3. **Rückseite bedrucken** einschalten und mit **„Aus Vorderseite berechnen“** automatisch füllen.
-4. **Abstände zwischen den Seiten** eintragen (mm, Endformat zu Endformat) – z. B. ein Steg in der
-   Mitte zum Falzen. Der Anschnitt ragt automatisch in den Steg hinein.
-5. **Anweisungen** per Rechtsklick oder **„+ Anweisung“** einfügen: Text, Falzlinie oder
-   Schnittlinie. Linien rasten auf den Rasterlinien ein, Texte lassen sich ziehen. Ein Text mit
-   weißem Hintergrund unterbricht die Linie darunter – so wie die Hinweise in klassischen
-   Ausschießer-Vorlagen.
-6. Unten zeigt die Leiste **„Seiten im Schema“**, ob jede Seite vorkommt. **Übernehmen** geht erst,
-   wenn alles stimmt.
+1. Set the number of pages and the grid (columns × rows) for each sheet.
+2. Enter a page number in each cell. ↻ rotates a page by 180°; ↻ at the start of a row rotates the
+   whole row.
+3. Enable the back side and fill it with *Aus Vorderseite berechnen* (Calculate from front).
+4. Enter the gaps between pages in mm (trim edge to trim edge). Bleed extends into a gap up to its
+   middle.
+5. Add text, fold lines or cut lines with a right-click or *+ Anweisung* (Add instruction). Lines snap
+   to grid lines. Text with a white background interrupts the line below it.
+6. *Übernehmen* (Apply) is available once every page appears in the scheme.
 
-Danach das Ganze als Vorlage speichern – fertig ist deine Kursvorlage.
+Save the result as a template to share it.
 
-## Häufige Fragen
+## Troubleshooting
 
-**Auf den Druckbögen bleiben Felder weiß.**
-Meist hat das PDF zu wenige Seiten (z. B. beim Export nur einen Bereich gewählt). Schau bei
-„Seiten“ und „Ergebnis“ nach, wie viele Leerseiten ergänzt werden.
+**Cells on the print sheet are empty.** The PDF has fewer pages than the binding requires, usually
+because only a page range was exported. Check *Seiten* (Pages) and *Ergebnis* (Result).
 
-**„Passt nicht auf den Bogen“.**
-Seiten, Abstände und Marken brauchen mehr Platz als das Bogenformat hat. Größeres Format wählen,
-Marken verkürzen oder ausschalten.
+**"Passt nicht auf den Bogen" (Does not fit on the sheet).** Pages, gaps and marks need more space than
+the sheet provides. Choose a larger sheet or shorten or disable the marks.
 
-**Die Rückseiten stehen auf dem Kopf.**
-Am Drucker die andere Kante zum Wenden wählen – oder in der App bei „Duplex“ umstellen.
+**Back sides are upside down.** Change the flip edge in the printer settings or under *Duplex* in the
+app.
 
-**Wo liegen meine Vorlagen?**
-Unter `~/Library/Application Support/Zine Imposer/templates`.
+**Colors.** Color spaces and profiles are passed through unchanged. The PDF/X output intent is not
+carried over; check the final PDF with your print shop's preflight.
 
-## Für Entwickler:innen
+## Development
 
-Gebaut mit [Electron](https://www.electronjs.org), [Svelte](https://svelte.dev) und TypeScript.
-PDFs werden mit [pdf-lib](https://pdf-lib.js.org) erzeugt, die Vorschau rendert
-[pdf.js](https://mozilla.github.io/pdf.js/), das 3D-Heft [three.js](https://threejs.org).
-
-Voraussetzung: [Node.js](https://nodejs.org) (LTS) auf macOS.
+Built with Electron, Svelte and TypeScript. PDFs are created with pdf-lib, the preview uses pdf.js and
+three.js. Requires Node.js (LTS) on macOS.
 
 ```bash
-npm install        # Abhängigkeiten installieren
-npm run dev        # App im Entwicklungsmodus starten
-npm test           # Tests des Ausschieß-Kerns
-npm run build:mac  # fertige App als .dmg im Ordner dist/
+npm install        # install dependencies
+npm run dev        # start the app in development mode
+npm test           # run the tests for the imposition core
+npm run build:mac  # build the .dmg into dist/
 ```
 
-| Ordner | Inhalt |
+| Folder | Contents |
 | --- | --- |
-| `src/core` | Ausschieß-Kern ohne Oberfläche: Seitenfolge, Bindungsarten, Geometrie, PDF-Ausgabe – mit Tests |
-| `src/main` | Electron-Hauptprozess: Dateien, Vorlagen, PDF-Verarbeitung im Hintergrund-Thread |
-| `src/preload` | Schnittstelle zwischen Fenster und Hauptprozess |
-| `src/renderer` | Oberfläche: Einstellungen, Vorschau, Schema-Editor |
-| `beispiel-vorlagen` | Beispiel für eine eigene Vorlage mit Schema |
+| `src/core` | Imposition logic without UI: page order, binding types, geometry, PDF output, tests |
+| `src/main` | Electron main process: files, templates, PDF processing in a worker thread |
+| `src/preload` | Bridge between the window and the main process |
+| `src/renderer` | User interface: settings, preview, scheme editor |
+| `beispiel-vorlagen` | Example template with a custom scheme |
 
-Neue Bindungsarten entstehen am einfachsten als Schema (siehe `falz24Layout` in
-`src/core/custom.ts`) – dafür muss man keine neue Logik schreiben.
+New binding types can be added as data (see `falz24Layout` in `src/core/custom.ts`).
