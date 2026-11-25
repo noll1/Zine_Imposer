@@ -229,16 +229,19 @@ export async function impose(
       const top = fullH - (pb.top - k.top)
       // Seiten ganz ohne Inhalt (kommt in manchen PDFs vor) lassen sich nicht einbetten: bleiben leer
       if (!srcPages[cell.page].node.Contents()) continue
-      const embedded = await out.embedPage(srcPages[cell.page], { left, bottom, right, top })
-
       // Endformat der Seite (ohne Anschnitt) landet genau auf der Zelle
       const cx = g.colX[c.col] * MM
       const cy = Y(g.rowY[c.row] + trimH)
-      if (!rot) {
-        page.drawPage(embedded, { x: cx - k.left, y: cy - k.bottom })
-      } else {
-        page.drawPage(embedded, { x: cx + pw + k.left, y: cy + ph + k.bottom, rotate: degrees(180) })
-      }
+      // Lage und Drehung stecken in der Matrix des eingebetteten Seitenobjekts, nicht in einer
+      // Verschiebung davor: Die Mac-Vorschau versetzt sonst Transparenzmasken (Soft Masks) in
+      // Bildern um genau diese Verschiebung – das Bild erscheint dann angeschnitten oder fehlt.
+      const x = rot ? cx + pw + k.left : cx - k.left // wo die linke untere Ecke des Ausschnitts landet
+      const y = rot ? cy + ph + k.bottom : cy - k.bottom
+      const matrix: [number, number, number, number, number, number] = rot
+        ? [-1, 0, 0, -1, x + left, y + bottom]
+        : [1, 0, 0, 1, x - left, y - bottom]
+      const embedded = await out.embedPage(srcPages[cell.page], { left, bottom, right, top }, matrix)
+      page.drawPage(embedded) // ohne weitere Verschiebung (Einheitsmatrix)
     }
 
     if (settings.cropMarks.enabled) drawMarks(page, side, g)
